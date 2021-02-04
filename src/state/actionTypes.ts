@@ -1,0 +1,7 @@
+export const GET_PRODUCT_BY_SLUG = 'GET_PRODUCT_BY_SLUG'
+export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
+export const UPDATE_TOTAL_CART = 'UPDATE_TOTAL_CART'
+export const UPDATE_QTY = 'UPDATE_QTY'
+export const DELETE_CART = 'DELETE_CART'
+export const ORDER_PRODUCT = 'ORDER_PRODUCT'
+export const CHANGE_PAGE = 'CHANGE_PAGE'

@@ -1,0 +1,38 @@
+[type='radio'] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type='radio'] + .variant-select {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type='radio']:checked + .variant-select {
+  border: 1px solid #666;
+  border-radius: 10px;
+}
+
+.slick-list {
+  margin: 0 -5px;
+}
+.slick-slide > div {
+  padding: 0 5px;
+}
+
+.slick-slide > div > div:focus {
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1px;
+  background: #999;
+}
