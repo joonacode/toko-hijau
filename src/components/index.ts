@@ -13,6 +13,7 @@ import FormatCurrency from './FormatCurrency'
 import ScrollToTop from './ScrollToTop'
 import MenuMobile from './MenuMobile'
 import ModalSearch from './ModalSearch'
+import CartMainItem from './CartMainItem'
 
 export {
   Footer,
@@ -30,4 +31,5 @@ export {
   FormatCurrency,
   ScrollToTop,
   ModalSearch,
+  CartMainItem,
 }

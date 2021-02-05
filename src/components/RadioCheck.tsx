@@ -13,7 +13,7 @@ const RadioCheck: React.FC<any> = (props) => {
       />
       <Box
         border='1px'
-        borderColor={useColorModeValue('gray.200', 'gray.700')}
+        borderColor={useColorModeValue('gray.200', 'blue.800')}
         py={props.py || '5px'}
         pr={props.pr || '5px'}
         pl={props.pl || '5px'}

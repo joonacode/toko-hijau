@@ -1,5 +1,5 @@
-import { UPDATE_QTY, DELETE_CART } from './../actionTypes'
-import { ADD_ITEM_TO_CART, UPDATE_TOTAL_CART } from '../actionTypes'
+import { UPDATE_QTY, DELETE_CART, ADD_ITEM_TO_TOKO } from './../actionTypes'
+import { ADD_ITEM_TO_CART, UPDATE_TOTAL_CART, CLEAR_CART } from '../actionTypes'
 
 type stateFace = {
   carts: {
@@ -28,6 +28,15 @@ const cartReducer = (state = initialState, action: any) => {
           items: [action.payload, ...state.carts.items],
         },
       }
+    case ADD_ITEM_TO_TOKO:
+      return {
+        ...state,
+        carts: {
+          totalItem: state.carts.totalItem,
+          totalPrice: state.carts.totalPrice,
+          items: action.payload,
+        },
+      }
     case UPDATE_TOTAL_CART:
       return {
         ...state,
@@ -49,7 +58,20 @@ const cartReducer = (state = initialState, action: any) => {
     case DELETE_CART:
       return {
         ...state,
-        carts: action.payload,
+        carts: {
+          totalItem: state.carts.totalItem,
+          totalPrice: state.carts.totalPrice,
+          items: action.payload,
+        },
+      }
+    case CLEAR_CART:
+      return {
+        ...state,
+        carts: {
+          totalItem: 0,
+          totalPrice: 0,
+          items: [],
+        },
       }
     default:
       return state

@@ -50,7 +50,7 @@ const MenuMobile: React.FC = () => {
               <Link to='/cart'>
                 <IconNavbar
                   Icon={FaShoppingCart}
-                  total={useCart().carts.items.length}
+                  total={useCart().carts.totalItem}
                 />
               </Link>
               <IconNavbar Icon={FaBell} total={5} />

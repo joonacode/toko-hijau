@@ -28,7 +28,6 @@ const Home: React.FC = () => {
   const currentPage = useProduct().currentPage
   const pageOne = products.slice(0, 10)
   const pageTwo = products.slice(10, 12)
-  console.log(currentPage)
   const dispatch = useDispatch()
 
   const handleOrder = (type: string) => {
@@ -81,7 +80,7 @@ const Home: React.FC = () => {
           <TabPanel>
             <Flex mt='10px' mb='20px' align='center'>
               <Text fontSize='lg' fontWeight='bold'>
-                Produk Baru
+                Produk Kami
               </Text>
               <Spacer />
               <Flex align='center'>

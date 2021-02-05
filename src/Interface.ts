@@ -11,6 +11,8 @@ export interface InterfaceCartItem {
   tokoAddress: string
   totalPrice: number
   qty: number
+  itemsByToko?: any
+  isChecked?: boolean
 }
 
 export interface InterfaceProduct {
@@ -26,4 +28,6 @@ export interface InterfaceProduct {
   tokoAddress: string
   qty?: number
   totalPrice?: number
+  itemsByToko?: any
+  isChecked?: boolean
 }

@@ -38,8 +38,11 @@ const ModalCart: React.FC<Props> = ({ isOpen, onClose, item }) => {
             rounded='lg'
             p='10px'
           >
-            <Flex alignItems='center'>
-              <HStack>
+            <Flex
+              alignItems={{ base: 'left', md: 'center' }}
+              flexDir={{ base: 'column', md: 'row' }}
+            >
+              <HStack spacing='10px'>
                 <Image
                   fallbackSrc={GIFLoading}
                   src={item.image}
@@ -57,7 +60,11 @@ const ModalCart: React.FC<Props> = ({ isOpen, onClose, item }) => {
               </HStack>
               <Spacer />
               <Link to='/cart'>
-                <Button colorScheme='green' size='sm'>
+                <Button
+                  colorScheme='green'
+                  mt={{ base: '10px', md: '0' }}
+                  size='sm'
+                >
                   Lihat Keranjang
                 </Button>
               </Link>

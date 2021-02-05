@@ -70,10 +70,18 @@ const DetailProduct: React.FC = () => {
         isClosable: true,
       })
     } else {
-      const checkAvailable = carts.items.filter(
-        (cart: InterfaceCartItem) =>
-          cart.slug === slug && cart.color === color && cart.size === size,
+      const getToko = carts.items.filter(
+        (item: any) => item.tokoId === detailProduct.tokoId,
       )
+      let checkAvailable
+      if (getToko.length === 0) {
+        checkAvailable = []
+      } else {
+        checkAvailable = getToko[0].itemsByToko.filter(
+          (cart: InterfaceCartItem) =>
+            cart.slug === slug && cart.color === color && cart.size === size,
+        )
+      }
       if (checkAvailable.length === 0) {
         const dataProduct = {
           ...detailProduct,
@@ -81,6 +89,7 @@ const DetailProduct: React.FC = () => {
           totalPrice: 1 * detailProduct.price,
           size,
           qty: 1,
+          isChecked: true,
         }
         dispatch(addToCart(dataProduct))
         setSuccessItem(dataProduct)
@@ -101,6 +110,16 @@ const DetailProduct: React.FC = () => {
 
   const products = useProduct().products
   const similar = products.slice(0, 11)
+  const [previewImage, setPreviewImage] = useState<string>('')
+  const handleClickImage = (image: string) => {
+    setPreviewImage(image)
+  }
+
+  useEffect(() => {
+    setPreviewImage('')
+    setColor('')
+    setSize('')
+  }, [slug])
 
   return (
     <>
@@ -110,14 +129,17 @@ const DetailProduct: React.FC = () => {
           <Box rounded='lg' overflow='hidden'>
             <Image
               fallbackSrc={GIFLoading}
-              src={detailProduct.image}
+              src={previewImage || detailProduct.image}
               alt='baju'
               boxSize='100%'
               objectFit='cover'
             />
           </Box>
           <Box mt='10px'>
-            <ListImageProduct />
+            <ListImageProduct
+              previewImage={previewImage}
+              handleClickImage={handleClickImage}
+            />
           </Box>
         </GridItem>
         <GridItem mt={{ base: '40px', md: '0' }} colSpan={{ base: 12, md: 7 }}>
@@ -246,12 +268,7 @@ const DetailProduct: React.FC = () => {
             </Box>
           </Flex>
           <HStack mt='20px'>
-            <Button
-              colorScheme='green'
-              onClick={showModal}
-              borderRadius='md'
-              size='sm'
-            >
+            <Button colorScheme='green' onClick={showModal} borderRadius='md'>
               Tambah Ke Keranjang
             </Button>
           </HStack>

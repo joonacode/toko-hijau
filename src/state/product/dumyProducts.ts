@@ -149,3 +149,28 @@ export const dumyProducts: InterfaceProduct[] = [
     ...tokoA,
   },
 ]
+export const dumyImage: string[] = [
+  'https://cf.shopee.co.id/file/bd94bcc5d73b5591f5e66183a8e439e8',
+
+  'https://cf.shopee.co.id/file/69406f43d6c698ff8d7870fd882c165e',
+
+  'https://s3.bukalapak.com/img/3648111666/large/Baju_Distro_UNKILLED_Kaos_Distro_Kaos_Pria_Keren.jpg',
+
+  'https://ecs7.tokopedia.net/img/cache/700/product-1/2018/6/7/11902367/11902367_07fa68c6-8845-4d5d-96d0-388689b4e401_800_800.jpg',
+
+  'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//88/MTA-4404291/onlinebaby-id_kaos_anak_laki-laki_pakaian_anak_cowok_korean_style_premium_hq_0071_full02_b7fzl1q3.jpg',
+
+  'https://cf.shopee.co.id/file/73221e2229b2257d88695f49981bdd41',
+
+  'https://cf.shopee.co.id/file/e1e4ded7f4f16f6271e6bf55cd41f89f',
+
+  'https://id-test-11.slatic.net/p/1580415ee2c77a1fe998f24858a91a23.jpg',
+
+  'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//89/MTA-8741123/no_brand_baju_koko_lengan_panjang_-_baju_koko_pria_-_baju_koko_murah_-_baju_koko_terbaru_-_baju_koko_pria_muslimin_-_koko_pria_lengan_panjang_list_bluberry_full02_ejiti93i.jpg',
+
+  'https://cf.shopee.co.id/file/84b9c8f15feb162e7617e12be6b12e79',
+
+  'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//106/MTA-4896934/hitjab_hitjab_8309_baju_gamis_rihana__gamis_pesta_polos_full04_n40ljgco.jpg',
+
+  'https://cdn.elevenia.co.id/g/9/1/2/8/0/7/14912807_B_V15.jpg',
+]

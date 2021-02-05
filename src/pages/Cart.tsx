@@ -6,7 +6,6 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Checkbox,
   Flex,
   Grid,
   GridItem,
@@ -15,19 +14,42 @@ import {
   Text,
   useColorModeValue,
   Image,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from '@chakra-ui/react'
-import React from 'react'
-import { RootStateOrAny, useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { GIFLoading, IMGEmpty } from '../assets'
 import { CartItem, FormatCurrency } from '../components'
+import { CLEAR_CART } from '../state/actionTypes'
 
 const Cart: React.FC = () => {
   const { items, totalItem, totalPrice } = useSelector(
     (state: RootStateOrAny) => state.cart.carts,
   )
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const onOpen = () => {
+    setIsOpen(true)
+  }
+  const onClose = () => setIsOpen(false)
+
   const borderColor = useColorModeValue('gray.100', 'gray.700')
+  const borderColorT = useColorModeValue('gray.100', 'gray.500')
   const bgRingkasan = useColorModeValue('white', 'gray.700')
+
+  const dispatch = useDispatch()
+  const cancelRef = React.useRef(null)
+
+  const handleClearCart = () => {
+    dispatch({ type: CLEAR_CART })
+    onClose()
+  }
 
   return (
     <Box minH='70vh'>
@@ -37,6 +59,7 @@ const Cart: React.FC = () => {
           justifyContent='center'
           alignItems='center'
           w='100%'
+          my='50px'
         >
           <Image
             src={IMGEmpty}
@@ -59,12 +82,13 @@ const Cart: React.FC = () => {
             <GridItem colSpan={{ base: 12, md: 7, lg: 8 }}>
               <Box borderBottom='4px' borderColor={borderColor} pb='10px'>
                 <Flex alignItems='center'>
-                  <Checkbox></Checkbox>
                   <Text ml='15px' fontSize='sm'>
-                    Pilih Semua Produk
+                    List Barang
                   </Text>
                   <Spacer />
-                  <Button size='sm'>Hapus</Button>
+                  <Button size='sm' onClick={onOpen}>
+                    Hapus Keranjang
+                  </Button>
                 </Flex>
               </Box>
               {items.map((cart: any, i: number) => (
@@ -102,7 +126,7 @@ const Cart: React.FC = () => {
                         mt='10px'
                         borderTop='1px'
                         pt='10px'
-                        borderColor='gray.200'
+                        borderColor={borderColorT}
                       >
                         <Text color='gray.500'>Total Harga</Text>
                         <Spacer />
@@ -127,6 +151,30 @@ const Cart: React.FC = () => {
           </Grid>
         </>
       )}
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Hapus Semua Barang
+            </AlertDialogHeader>
+
+            <AlertDialogBody>Apakah kamu yakin ?</AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Batal
+              </Button>
+              <Button colorScheme='red' onClick={handleClearCart} ml={3}>
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Box>
   )
 }

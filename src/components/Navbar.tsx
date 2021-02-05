@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
       py='15px'
       position='sticky'
       top='0'
-      zIndex='100'
+      zIndex='300'
       bgColor={useColorModeValue('white', 'gray.800')}
     >
       <Container maxW='95%'>
@@ -90,7 +90,7 @@ const Navbar: React.FC = () => {
             <Link to='/cart'>
               <IconNavbar
                 Icon={FaShoppingCart}
-                total={useCart().carts.items.length}
+                total={useCart().carts.totalItem}
               />
             </Link>
             <IconNavbar Icon={FaBell} total={5} />
