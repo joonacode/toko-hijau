@@ -5,6 +5,7 @@ Toko Hijau is a website where you can buy and sell anything online <a href="http
 ## Built With
 
 * [ReactJS](https://reactjs.org)
+* [Redux](https://redux.js.org/)
 * [Typescript](http://typescriptlang.org/)
 * [Chakra UI](https://chakra-ui.com/)
 * [React Slick](https://react-slick.neostack.com)
