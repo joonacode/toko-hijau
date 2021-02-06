@@ -15,6 +15,7 @@ import { FaEnvelope, FaBell, FaShoppingCart } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { IconNavbar } from '.'
 import { IMGAvatar, IMGShop } from '../assets'
+import { useSecondaryColor } from '../hooks'
 import useCart from '../hooks/useCart'
 
 const MenuMobile: React.FC = () => {
@@ -34,7 +35,7 @@ const MenuMobile: React.FC = () => {
         <Flex alignItems='center' justifyContent='space-between'>
           <Box>
             <Menu isLazy>
-              <MenuButton fontSize='sm' color='gray.500' size='sm'>
+              <MenuButton fontSize='sm' color={useSecondaryColor()} size='sm'>
                 Kategori
               </MenuButton>
               <MenuList>

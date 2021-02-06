@@ -1,3 +1,4 @@
+import { IProduct } from './../../Interface'
 import {
   GET_PRODUCT_BY_SLUG,
   ORDER_PRODUCT,
@@ -5,7 +6,15 @@ import {
 } from './../actionTypes'
 import { dumyProducts } from './dumyProducts'
 
-const initialState = {
+type TProductReducer = {
+  products: IProduct[]
+  productsBc: IProduct[]
+  detailProduct: {}
+  currentPage: number
+  totalPage: number
+}
+
+const initialState: TProductReducer = {
   products: dumyProducts,
   productsBc: dumyProducts,
   detailProduct: { image: '' },

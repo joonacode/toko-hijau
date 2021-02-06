@@ -18,6 +18,7 @@ import { FaEnvelope, FaSearch, FaBell, FaShoppingCart } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { IconNavbar, ModalSearch } from '.'
 import { IMGAvatar, IMGShop } from '../assets'
+import { useSecondaryColor } from '../hooks'
 import useCart from '../hooks/useCart'
 import ColorModeSwitcher from './ColorModeSwitcher'
 import Logo from './Logo'
@@ -43,7 +44,7 @@ const Navbar: React.FC = () => {
           <Logo />
           <Box display={{ base: 'none', lg: 'block' }}>
             <Menu isLazy>
-              <MenuButton fontSize='sm' color='gray.500' size='sm'>
+              <MenuButton fontSize='sm' color={useSecondaryColor()} size='sm'>
                 Kategori
               </MenuButton>
               <MenuList>
@@ -111,7 +112,7 @@ const Navbar: React.FC = () => {
 
                   <Text
                     fontSize='sm'
-                    color='gray.500'
+                    color={useSecondaryColor()}
                     display={{ base: 'none', lg: 'block' }}
                   >
                     Toko
@@ -132,7 +133,7 @@ const Navbar: React.FC = () => {
                   <Avatar size='xs' name='Dan Abrahmov' src={IMGAvatar} />
                   <Text
                     fontSize='sm'
-                    color='gray.500'
+                    color={useSecondaryColor()}
                     display={{ base: 'none', lg: 'block' }}
                   >
                     Muhammad

@@ -1,23 +1,23 @@
 import {
-  UPDATE_QTY,
-  DELETE_CART,
-  ADD_ITEM_TO_TOKO,
   CHECK_ALL_CART,
   UPDATE_ALL_CHECK,
+  UPDATE_ITEMS_CART,
+  ADD_ITEM_TO_CART,
+  UPDATE_TOTAL_CART,
+  CLEAR_CART,
 } from './../actionTypes'
-import { ADD_ITEM_TO_CART, UPDATE_TOTAL_CART, CLEAR_CART } from '../actionTypes'
 
-type stateFace = {
+type TCartReducer = {
   carts: {
     totalItem: number
     totalPrice: number
     selectedItem: number
-    items: any[]
     allChecked: boolean
+    items: any[]
   }
 }
 
-const initialState: stateFace = {
+const initialState: TCartReducer = {
   carts: {
     totalItem: 0,
     totalPrice: 0,
@@ -33,21 +33,16 @@ const cartReducer = (state = initialState, action: any) => {
       return {
         ...state,
         carts: {
-          totalItem: state.carts.totalItem,
-          totalPrice: state.carts.totalPrice,
-          selectedItem: state.carts.selectedItem,
+          ...state.carts,
           allChecked: true,
           items: [action.payload, ...state.carts.items],
         },
       }
-    case ADD_ITEM_TO_TOKO:
+    case UPDATE_ITEMS_CART:
       return {
         ...state,
         carts: {
-          totalItem: state.carts.totalItem,
-          totalPrice: state.carts.totalPrice,
-          selectedItem: state.carts.selectedItem,
-          allChecked: state.carts.allChecked,
+          ...state.carts,
           items: action.payload,
         },
       }
@@ -55,42 +50,17 @@ const cartReducer = (state = initialState, action: any) => {
       return {
         ...state,
         carts: {
+          ...state.carts,
           totalItem: action.payload.totalItem,
           totalPrice: action.payload.totalPrice,
           selectedItem: action.payload.selectedItem,
-          allChecked: state.carts.allChecked,
-          items: state.carts.items,
-        },
-      }
-    case UPDATE_QTY:
-      return {
-        ...state,
-        carts: {
-          totalItem: action.payload.totalItem,
-          totalPrice: action.payload.totalPrice,
-          selectedItem: state.carts.selectedItem,
-          allChecked: state.carts.allChecked,
-          items: action.payload.items,
-        },
-      }
-    case DELETE_CART:
-      return {
-        ...state,
-        carts: {
-          totalItem: state.carts.totalItem,
-          totalPrice: state.carts.totalPrice,
-          selectedItem: state.carts.selectedItem,
-          allChecked: state.carts.allChecked,
-          items: action.payload,
         },
       }
     case CHECK_ALL_CART:
       return {
         ...state,
         carts: {
-          totalItem: state.carts.totalItem,
-          totalPrice: state.carts.totalPrice,
-          selectedItem: state.carts.selectedItem,
+          ...state.carts,
           allChecked: action.payload.allChecked,
           items: action.payload.items,
         },
@@ -99,11 +69,8 @@ const cartReducer = (state = initialState, action: any) => {
       return {
         ...state,
         carts: {
-          totalItem: state.carts.totalItem,
-          totalPrice: state.carts.totalPrice,
-          selectedItem: state.carts.selectedItem,
+          ...state.carts,
           allChecked: action.payload,
-          items: state.carts.items,
         },
       }
     case CLEAR_CART:

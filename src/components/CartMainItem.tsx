@@ -21,10 +21,11 @@ import {
   updateQty,
 } from '../state/cart/cartActions'
 import { FormatCurrency } from '.'
-import { InterfaceCartItem } from '../Interface'
+import { IProduct } from '../Interface'
 import { GIFLoading } from '../assets'
+import { Link } from 'react-router-dom'
 
-const CartMainItem: React.FC<InterfaceCartItem> = ({
+const CartMainItem: React.FC<IProduct> = ({
   id,
   name,
   image,
@@ -35,10 +36,12 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
   size,
   qty,
   isChecked,
+  slug,
 }) => {
   const toast = useToast()
   const dispatch = useDispatch()
   const [qtyState, setQtyState] = useState<number>(0)
+
   useEffect(() => {
     setQtyState(qty!)
   }, [qty])
@@ -98,22 +101,18 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
     }
   }
 
-  const handleDeleteItem = (
+  type handleCart = (
     id: number,
-    size: string,
-    color: string,
+    size: string | string[],
+    color: string | string[],
     tokoId: number,
-  ) => {
+    isChecked: boolean | null,
+  ) => void
+
+  const handleDeleteItem: handleCart = (id, size, color, tokoId) => {
     dispatch(deleteCart({ id, size, color, tokoId }))
   }
-
-  const handleCheck = (
-    isChecked: boolean,
-    id: number,
-    color: string,
-    size: string,
-    tokoId: number,
-  ) => {
+  const handleCheck: handleCart = (id, size, color, tokoId, isChecked) => {
     const data = {
       isChecked: !isChecked,
       id,
@@ -146,7 +145,7 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
           <Checkbox
             colorScheme='green'
             isChecked={isChecked}
-            onChange={() => handleCheck(isChecked!, id, color, size, tokoId)}
+            onChange={() => handleCheck(id, size, color, tokoId, isChecked!)}
             mr='15px'
           ></Checkbox>
           <Image
@@ -159,9 +158,11 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
             alt={name}
           />
           <VStack justifyContent='left' alignItems='left'>
-            <Text fontSize='base' fontWeight='bold' alignItems='start'>
-              {name} - {color}, {size}
-            </Text>
+            <Link to={`/detail/${slug}`}>
+              <Text fontSize='base' fontWeight='bold' alignItems='start'>
+                {name} - {color}, {size}
+              </Text>
+            </Link>
 
             <HStack>
               <Text
@@ -219,7 +220,7 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
             size='sm'
             variant='ghost'
             color='gray.400'
-            onClick={() => handleDeleteItem(id, size, color, tokoId)}
+            onClick={() => handleDeleteItem(id, size, color, tokoId, null)}
           >
             <FaTrash />
           </Button>

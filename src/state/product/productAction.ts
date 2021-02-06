@@ -1,12 +1,12 @@
 import { ORDER_PRODUCT } from './../actionTypes'
-import { InterfaceProduct } from '../../Interface'
+import { IProduct } from '../../Interface'
 import { GET_PRODUCT_BY_SLUG } from '../actionTypes'
 
 export const getProductBySlug = (payload: string) => {
   return function dispatch(dispatch: any, getState: any) {
     const products = getState().product.products
     const response = products.filter(
-      (product: InterfaceProduct) => product.slug === payload,
+      (product: IProduct) => product.slug === payload,
     )
     if (response.length > 0) {
       dispatch({
@@ -22,7 +22,7 @@ export const getProductBySlug = (payload: string) => {
   }
 }
 
-const actionOrder = (payload: InterfaceProduct[]) => {
+const actionOrder = (payload: IProduct[]) => {
   return {
     type: ORDER_PRODUCT,
     payload,
@@ -33,32 +33,32 @@ export const orderProduct = (payload: string) => {
   return function dispatch(dispatch: any, getState: any) {
     const productsBc = getState().product.productsBc
     if (payload === 'name-asc') {
-      productsBc.sort((a: InterfaceProduct, b: InterfaceProduct) =>
+      productsBc.sort((a: IProduct, b: IProduct) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
       )
       dispatch(actionOrder(productsBc))
     } else if (payload === 'name-desc') {
-      productsBc.sort((a: InterfaceProduct, b: InterfaceProduct) =>
+      productsBc.sort((a: IProduct, b: IProduct) =>
         a.name < b.name ? 1 : b.name < a.name ? -1 : 0,
       )
       dispatch(actionOrder(productsBc))
     } else if (payload === 'price-asc') {
-      productsBc.sort((a: InterfaceProduct, b: InterfaceProduct) =>
+      productsBc.sort((a: IProduct, b: IProduct) =>
         a.price > b.price ? 1 : b.price > a.price ? -1 : 0,
       )
       dispatch(actionOrder(productsBc))
     } else if (payload === 'price-desc') {
-      productsBc.sort((a: InterfaceProduct, b: InterfaceProduct) =>
+      productsBc.sort((a: IProduct, b: IProduct) =>
         a.price < b.price ? 1 : b.price < a.price ? -1 : 0,
       )
       dispatch(actionOrder(productsBc))
     } else if (payload === 'date-asc') {
-      productsBc.sort((a: InterfaceProduct, b: InterfaceProduct) =>
+      productsBc.sort((a: IProduct, b: IProduct) =>
         a.id > b.id ? 1 : b.id > a.id ? -1 : 0,
       )
       dispatch(actionOrder(productsBc))
     } else if (payload === 'date-desc') {
-      productsBc.sort((a: InterfaceProduct, b: InterfaceProduct) =>
+      productsBc.sort((a: IProduct, b: IProduct) =>
         a.id < b.id ? 1 : b.id < a.id ? -1 : 0,
       )
       dispatch(actionOrder(productsBc))

@@ -1,11 +1,10 @@
+import { IProduct, IItemCart } from './../../Interface'
 import {
   UPDATE_TOTAL_CART,
-  UPDATE_QTY,
-  DELETE_CART,
-  ADD_ITEM_TO_TOKO,
   CHECK_ALL_CART,
   UPDATE_ALL_CHECK,
   CLEAR_CART,
+  UPDATE_ITEMS_CART,
 } from './../actionTypes'
 import { ADD_ITEM_TO_CART } from '../actionTypes'
 
@@ -13,33 +12,44 @@ export const updatePriceAndTotal = () => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
 
-    const getTotalPrice = carts.map((item: any) => {
+    const getTotalPrice = carts.map((item: IItemCart) => {
       return item.itemsByToko.map(
-        (cart: any) => cart.isChecked === true && cart.totalPrice,
+        (cart: IProduct) => cart.isChecked === true && cart.totalPrice,
       )
     })
-    const reducePrice = getTotalPrice
-      .map((price: any) => {
-        return price.reduce((prev: any, next: any) => prev + next)
+
+    const totalPrice = getTotalPrice
+      .map((price: any[]) => {
+        return price.reduce((prev: number, next: number) => prev + next)
       })
-      .reduce((prev: any, next: any) => prev + next)
+      .reduce((prev: number, next: number) => prev + next)
+
     const totalItem = carts
-      .map((item: any) => {
+      .map((item: IItemCart) => {
         return item.itemsByToko.length
       })
-      .reduce((prev: any, next: any) => prev + next)
+      .reduce((prev: number, next: number) => prev + next)
+
     const selectedItem = getTotalPrice
-      .map((item: any) => {
+      .map((item: any[]) => {
         return item.filter((price: any) => price !== false)
       })
-      .map((res: any) => res.length)
-      .reduce((prev: any, next: any) => prev + next)
+      .map((res: []) => res.length)
+      .reduce((prev: number, next: number) => prev + next)
+
+    let finalTotalPrice
+    if (totalPrice === false) {
+      finalTotalPrice = 0
+    } else {
+      finalTotalPrice = totalPrice
+    }
+
     dispatch({
       type: UPDATE_TOTAL_CART,
       payload: {
-        totalItem: totalItem,
-        totalPrice: reducePrice,
-        selectedItem: selectedItem,
+        totalItem,
+        totalPrice: finalTotalPrice,
+        selectedItem,
       },
     })
   }
@@ -49,25 +59,25 @@ export const addToCart = (payload: any) => {
   return function dispatch(dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
     const checkTokoAvail = carts.findIndex(
-      (item: any) => item.tokoId === payload.tokoId,
+      (item: IItemCart) => item.tokoId === payload.tokoId,
     )
     if (checkTokoAvail === 0) {
       const currentToko = carts.filter(
-        (item: any) => item.tokoId === payload.tokoId,
+        (item: IItemCart) => item.tokoId === payload.tokoId,
       )[0]
       const getIndexCurrentToko = carts.findIndex(
-        (item: any) => item.tokoId === payload.tokoId,
+        (item: IItemCart) => item.tokoId === payload.tokoId,
       )
       carts[getIndexCurrentToko].itemsByToko = [
         payload,
         ...currentToko.itemsByToko,
       ]
       dispatch({
-        type: ADD_ITEM_TO_TOKO,
+        type: UPDATE_ITEMS_CART,
         payload: carts,
       })
     } else {
-      const newPayload = {
+      const newPayload: IItemCart = {
         tokoId: payload.tokoId,
         allChecked: true,
         tokoName: payload.tokoName,
@@ -88,20 +98,15 @@ export const updateQty = (payload: any) => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
     const getCurrentToko = carts.filter(
-      (item: any) => item.tokoId === payload.tokoId,
+      (item: IItemCart) => item.tokoId === payload.tokoId,
     )[0]
     const getIndexCurrentProduct = getCurrentToko.itemsByToko.findIndex(
-      (item: any) =>
+      (item: IProduct) =>
         item.id === payload.id &&
         item.color === payload.color &&
         item.size === payload.size,
     )
-    const getCurrentProduct = getCurrentToko.itemsByToko.filter(
-      (item: any) =>
-        item.id === payload.id &&
-        item.color === payload.color &&
-        item.size === payload.size,
-    )[0]
+    const getCurrentProduct = getCurrentToko.itemsByToko[getIndexCurrentProduct]
     getCurrentProduct.qty = payload.qty
     getCurrentProduct.totalPrice = payload.qty * getCurrentProduct.price
     getCurrentToko.itemsByToko.splice(
@@ -109,15 +114,15 @@ export const updateQty = (payload: any) => {
       1,
       getCurrentProduct,
     )
-    dispatch({ type: ADD_ITEM_TO_TOKO, payload: carts })
+    dispatch({ type: UPDATE_ITEMS_CART, payload: carts })
     dispatch(updatePriceAndTotal())
   }
 }
 
 type TDeleteCart = {
   id: number
-  size: string
-  color: string
+  size: string | string[]
+  color: string | string[]
   tokoId: number
 }
 
@@ -126,62 +131,51 @@ export const deleteCart = (payload: TDeleteCart) => {
     const carts = getState().cart.carts.items
 
     const getCurrentToko = carts.filter(
-      (item: any) => item.tokoId === payload.tokoId,
+      (item: IItemCart) => item.tokoId === payload.tokoId,
     )[0]
     const getIndexProduct = getCurrentToko.itemsByToko.findIndex(
-      (item: any) =>
+      (item: IProduct) =>
         item.id === payload.id &&
         item.color === payload.color &&
         item.size === payload.size,
     )
     getCurrentToko.itemsByToko.splice(getIndexProduct, 1)
-    dispatch({ type: DELETE_CART, payload: carts })
+    dispatch({ type: UPDATE_ITEMS_CART, payload: carts })
     const ifAllCartEmpty = carts
-      .map((item: any) => {
+      .map((item: IItemCart) => {
         return item.itemsByToko.length
       })
       .every((v: number) => v === 0)
     if (ifAllCartEmpty) {
       dispatch({
-        type: UPDATE_QTY,
-        payload: {
-          totalItem: 0,
-          totalPrice: 0,
-          items: [],
-        },
+        type: CLEAR_CART,
       })
     } else {
       const newCarts = getState().cart.carts.items
-      const p = newCarts.filter((item: any) => {
+      const res = newCarts.filter((item: IItemCart) => {
         return item.itemsByToko.length > 0
       })
-      dispatch({ type: DELETE_CART, payload: p })
+      dispatch({ type: UPDATE_ITEMS_CART, payload: res })
       dispatch(updatePriceAndTotal())
     }
   }
 }
 
-type TChangeCheckCart = {
-  isChecked: boolean
-  id: number
-  color: string
-  size: string
-  tokoId: number
-}
-
 export const checkStatus = (tokoId: number) => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
-    const resultFilter = carts.filter((item: any) => item.tokoId === tokoId)[0]
+    const resultFilter = carts.filter(
+      (item: IItemCart) => item.tokoId === tokoId,
+    )[0]
     const checkIsAllTrue = resultFilter.itemsByToko.every(
-      (item: any) => item.isChecked === true,
+      (item: IProduct) => item.isChecked === true,
     )
     if (checkIsAllTrue) {
       resultFilter.allChecked = true
     } else {
       resultFilter.allChecked = false
     }
-    dispatch({ type: ADD_ITEM_TO_TOKO, payload: carts })
+    dispatch({ type: UPDATE_ITEMS_CART, payload: carts })
   }
 }
 
@@ -189,7 +183,7 @@ export const checkAllStatusCart = () => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
 
-    const status = carts.every((item: any) => item.allChecked === true)
+    const status = carts.every((item: IItemCart) => item.allChecked === true)
     if (status) {
       dispatch({ type: UPDATE_ALL_CHECK, payload: true })
     } else {
@@ -198,31 +192,26 @@ export const checkAllStatusCart = () => {
   }
 }
 
-export const changeCheckCart = (payload: TChangeCheckCart) => {
+export const changeCheckCart = (payload: any) => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
     const getCurrentToko = carts.filter(
-      (item: any) => item.tokoId === payload.tokoId,
+      (item: IItemCart) => item.tokoId === payload.tokoId,
     )[0]
     const getIndexCurrentProduct = getCurrentToko.itemsByToko.findIndex(
-      (item: any) =>
+      (item: IProduct) =>
         item.id === payload.id &&
         item.color === payload.color &&
         item.size === payload.size,
     )
-    const getCurrentProduct = getCurrentToko.itemsByToko.filter(
-      (item: any) =>
-        item.id === payload.id &&
-        item.color === payload.color &&
-        item.size === payload.size,
-    )[0]
+    const getCurrentProduct = getCurrentToko.itemsByToko[getIndexCurrentProduct]
     getCurrentProduct.isChecked = payload.isChecked
     getCurrentToko.itemsByToko.splice(
       getIndexCurrentProduct,
       1,
       getCurrentProduct,
     )
-    dispatch({ type: ADD_ITEM_TO_TOKO, payload: carts })
+    dispatch({ type: UPDATE_ITEMS_CART, payload: carts })
     dispatch(checkStatus(payload.tokoId))
     dispatch(checkAllStatusCart())
     dispatch(updatePriceAndTotal())
@@ -233,9 +222,9 @@ export const changeCheckToko = (payload: any) => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
     const getToko = carts.filter(
-      (item: any) => item.tokoId === payload.tokoId,
+      (item: IItemCart) => item.tokoId === payload.tokoId,
     )[0]
-    const newToko = getToko.itemsByToko.map((item: any) => {
+    const newToko = getToko.itemsByToko.map((item: IProduct) => {
       return {
         ...item,
         isChecked: payload.status,
@@ -243,7 +232,7 @@ export const changeCheckToko = (payload: any) => {
     })
 
     const getIndexToko = carts.findIndex(
-      (item: any) => item.tokoId === payload.tokoId,
+      (item: IItemCart) => item.tokoId === payload.tokoId,
     )
 
     const result = {
@@ -256,7 +245,7 @@ export const changeCheckToko = (payload: any) => {
 
     carts.splice(getIndexToko, 1, result)
 
-    dispatch({ type: ADD_ITEM_TO_TOKO, payload: carts })
+    dispatch({ type: UPDATE_ITEMS_CART, payload: carts })
     dispatch(checkAllStatusCart())
     dispatch(updatePriceAndTotal())
   }
@@ -266,10 +255,10 @@ export const checkAllCart = (payload: boolean) => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
 
-    const items = carts.map((item: any) => {
+    const items = carts.map((item: IItemCart) => {
       return {
         ...item,
-        itemsByToko: item.itemsByToko.map((item: any) => {
+        itemsByToko: item.itemsByToko.map((item: IProduct) => {
           return {
             ...item,
             isChecked: payload,
@@ -294,16 +283,16 @@ export const paymentAction = (payload: boolean) => {
     } else {
       const carts = getState().cart.carts.items
       const result = carts
-        .map((item: any) => {
+        .map((item: IItemCart) => {
           return {
             ...item,
             itemsByToko: item.itemsByToko.filter(
-              (cart: any) => cart.isChecked === false,
+              (cart: IProduct) => cart.isChecked === false,
             ),
           }
         })
-        .filter((item: any) => item.itemsByToko.length > 0)
-      dispatch({ type: ADD_ITEM_TO_TOKO, payload: result })
+        .filter((item: IItemCart) => item.itemsByToko.length > 0)
+      dispatch({ type: UPDATE_ITEMS_CART, payload: result })
       dispatch(updatePriceAndTotal())
     }
   }

@@ -2,13 +2,13 @@ import { Box, Checkbox, Flex, Text, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { CartMainItem } from '.'
-import { InterfaceCartItem } from '../Interface'
+import { IProduct } from '../Interface'
 import { changeCheckToko } from '../state/cart/cartActions'
 
 type Props = {
   tokoName: string
   tokoAddress: string
-  itemsByToko: InterfaceCartItem[]
+  itemsByToko: IProduct[]
   allChecked: boolean
   tokoId: number
 }

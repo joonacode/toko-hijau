@@ -20,7 +20,7 @@ import { GIFLoading } from '../assets'
 
 type Props = {
   isOpen: boolean
-  onClose: any
+  onClose: () => void
   item: any
 }
 

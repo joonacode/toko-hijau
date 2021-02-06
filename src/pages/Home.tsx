@@ -18,14 +18,12 @@ import { FaBox, FaStore, FaUser, FaBook, FaFilter } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
 import { ProductItem } from '../components'
 import useProduct from '../hooks/useProduct'
-import { InterfaceProduct } from '../Interface'
+import { IProduct } from '../Interface'
 import { CHANGE_PAGE } from '../state/actionTypes'
 import { orderProduct } from '../state/product/productAction'
 
 const Home: React.FC = () => {
-  const products = useProduct().products
-  const totalPage = useProduct().totalPage
-  const currentPage = useProduct().currentPage
+  const { products, totalPage, currentPage } = useProduct()
   const pageOne = products.slice(0, 10)
   const pageTwo = products.slice(10, 12)
   const dispatch = useDispatch()
@@ -112,14 +110,14 @@ const Home: React.FC = () => {
             </Flex>
             {currentPage === 1 && (
               <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
-                {pageOne.map((product: InterfaceProduct, i: number) => (
+                {pageOne.map((product: IProduct, i: number) => (
                   <ProductItem {...product} key={i} />
                 ))}
               </Grid>
             )}
             {currentPage === 2 && (
               <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
-                {pageTwo.map((product: InterfaceProduct, i: number) => (
+                {pageTwo.map((product: IProduct, i: number) => (
                   <ProductItem {...product} key={i} />
                 ))}
               </Grid>

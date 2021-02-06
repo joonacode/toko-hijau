@@ -16,6 +16,11 @@
   border-radius: 10px;
 }
 
+body.chakra-ui-dark [type='radio']:checked + .variant-select {
+  border: 1px solid #999;
+  border-radius: 10px;
+}
+
 .slick-list {
   margin: 0 -5px;
 }

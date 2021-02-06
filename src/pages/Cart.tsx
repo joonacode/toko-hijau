@@ -22,7 +22,7 @@ import {
   AlertDialogOverlay,
   Checkbox,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { GIFLoading, IMGEmpty } from '../assets'
@@ -37,9 +37,7 @@ const Cart: React.FC = () => {
   const history = useHistory()
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const onOpen = () => {
-    setIsOpen(true)
-  }
+  const onOpen = () => setIsOpen(true)
   const onClose = () => setIsOpen(false)
 
   const borderColor = useColorModeValue('gray.100', 'gray.700')
@@ -47,7 +45,7 @@ const Cart: React.FC = () => {
   const bgRingkasan = useColorModeValue('white', 'gray.700')
 
   const dispatch = useDispatch()
-  const cancelRef = React.useRef(null)
+  const cancelRef = useRef(null)
 
   const handleClearCart = () => {
     dispatch({ type: CLEAR_CART })
@@ -98,7 +96,6 @@ const Cart: React.FC = () => {
                     isChecked={allChecked}
                     onChange={() => handleCheckAll(allChecked)}
                     colorScheme='green'
-                    // mr='15px'
                   ></Checkbox>
                   <Text ml='15px' fontSize='sm'>
                     Pilih Semua Produk
@@ -123,8 +120,8 @@ const Cart: React.FC = () => {
               <Box
                 position={{ base: 'fixed', md: 'sticky' }}
                 top={{ base: 'auto', md: '90px' }}
-                bottom={{ base: '0', md: 'auto' }}
-                left={{ base: '0', md: 'auto' }}
+                bottom={{ base: '0', md: '0' }}
+                left={{ base: '0', md: '0' }}
                 bgColor={bgRingkasan}
                 w='100%'
                 border='1px'

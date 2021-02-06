@@ -1,4 +1,4 @@
-import { InterfaceProduct } from '../../Interface'
+import { IProduct } from '../../Interface'
 type typeToko = {
   tokoId: number
   tokoName: string
@@ -21,7 +21,7 @@ const tokoC: typeToko = {
   tokoAddress: 'Surabaya',
 }
 
-export const dumyProducts: InterfaceProduct[] = [
+export const dumyProducts: IProduct[] = [
   {
     id: 1,
     name: 'Jaket main murah meriah',

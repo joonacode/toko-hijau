@@ -8,11 +8,9 @@ import {
   MenuMobile,
 } from './components'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Home, DetailProduct, Cart } from './pages'
+import { Home, DetailProduct, Cart, Payment, PageNotFound } from './pages'
 import theme from './theme'
 import './assets/styles/global.css'
-import PageNotFound from './pages/PageNotFound'
-import Payment from './pages/Payment'
 
 export const App: React.FC = () => {
   return (
@@ -29,15 +27,17 @@ export const App: React.FC = () => {
         </Box>
         <Navbar />
         <MenuMobile />
-        <Container mt='30px' maxW={{ base: '95%', lg: '80%' }}>
-          <Switch>
-            <Route exact={true} path='/' component={Home} />
-            <Route path='/detail/:slug' component={DetailProduct} />
-            <Route path='/payment/:status' component={Payment} />
-            <Route path='/cart' component={Cart} />
-            <Route path='*' component={PageNotFound} />
-          </Switch>
-        </Container>
+        <Box>
+          <Container mt='30px' maxW={{ base: '95%', lg: '80%' }}>
+            <Switch>
+              <Route exact={true} path='/' component={Home} />
+              <Route path='/detail/:slug' component={DetailProduct} />
+              <Route path='/payment/:status' component={Payment} />
+              <Route path='/cart' component={Cart} />
+              <Route path='*' component={PageNotFound} />
+            </Switch>
+          </Container>
+        </Box>
         <Footer />
       </Router>
     </ChakraProvider>

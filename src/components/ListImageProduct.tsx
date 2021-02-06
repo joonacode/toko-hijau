@@ -9,7 +9,7 @@ import { dumyProducts } from '../state/product/dumyProducts'
 import useProduct from '../hooks/useProduct'
 
 type Props = {
-  handleClickImage: any
+  handleClickImage: (image: string) => void
   previewImage: string
 }
 
@@ -63,7 +63,7 @@ const ListImageProduct: React.FC<Props> = ({
       },
     ],
   }
-  const detailProduct = useProduct().detailProduct
+  const { detailProduct } = useProduct()
 
   const sliderRef: React.RefObject<Slider> = useRef(null)
   const next = () => sliderRef.current?.slickNext()
@@ -75,7 +75,7 @@ const ListImageProduct: React.FC<Props> = ({
         onClick={prev}
         rounded='full'
         position='absolute'
-        left='-30px'
+        left={{ base: '-20px', md: '-30px' }}
         zIndex={100}
         top='15%'
         shadow='lg'
@@ -94,7 +94,7 @@ const ListImageProduct: React.FC<Props> = ({
         onClick={next}
         rounded='full'
         position='absolute'
-        right='-30px'
+        right={{ base: '-20px', md: '-30px' }}
         zIndex={100}
         top='15%'
         shadow='lg'

@@ -24,10 +24,9 @@ import {
   ProductItem,
   FormatCurrency,
 } from '../components'
-import useCart from '../hooks/useCart'
-import useProduct from '../hooks/useProduct'
+import { useCart, useProduct } from '../hooks'
 import { addToCart } from '../state/cart/cartActions'
-import { InterfaceCartItem, InterfaceProduct } from '../Interface'
+import { IProduct } from '../Interface'
 import { getProductBySlug } from '../state/product/productAction'
 import { FaHeart } from 'react-icons/fa'
 
@@ -40,13 +39,13 @@ const DetailProduct: React.FC = () => {
     dispatch(getProductBySlug(slug))
   }, [slug, dispatch])
 
-  const detailProduct = useProduct().detailProduct
+  const { detailProduct, products } = useProduct()
   const carts = useCart().carts
   const dataBreadcrumb = [detailProduct.tokoName, detailProduct.name]
 
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [size, setSize] = useState<string>('')
-  const [sucessItem, setSuccessItem] = useState<InterfaceProduct | {}>({})
+  const [sucessItem, setSuccessItem] = useState<IProduct | {}>({})
   const [color, setColor] = useState<string>('')
   const colorOptions = detailProduct.color || ['Hijau', 'Coklat', 'Abu-abu']
   const sizeOptions = detailProduct.size || ['m', 'l', 'xl']
@@ -79,7 +78,7 @@ const DetailProduct: React.FC = () => {
         checkAvailable = []
       } else {
         checkAvailable = getToko[0].itemsByToko.filter(
-          (cart: InterfaceCartItem) =>
+          (cart: IProduct) =>
             cart.slug === slug && cart.color === color && cart.size === size,
         )
       }
@@ -109,14 +108,13 @@ const DetailProduct: React.FC = () => {
     }
   }
 
-  const products = useProduct().products
   const similar = products.slice(0, 11)
   const [previewImage, setPreviewImage] = useState<string>('')
   const handleClickImage = (image: string) => {
     setPreviewImage(image)
   }
 
-  const [isLike, setIsLike] = useState(false)
+  const [isLike, setIsLike] = useState<boolean>(false)
 
   const toggleIsLike = () => {
     setIsLike(!isLike)
@@ -138,10 +136,8 @@ const DetailProduct: React.FC = () => {
     setSize('')
   }, [slug])
 
-  const colorOne = useColorModeValue('gray.200', 'gray.700')
+  const borderColor = useColorModeValue('gray.200', 'gray.700')
   const colorTwo = useColorModeValue('orange.600', 'orange.400')
-  const colorThree = useColorModeValue('gray.200', 'gray.700')
-  const colorFour = useColorModeValue('gray.200', 'gray.700')
 
   return (
     <>
@@ -193,7 +189,7 @@ const DetailProduct: React.FC = () => {
                 mt='40px'
                 pb='20px'
                 borderBottom='1px'
-                borderColor={colorOne}
+                borderColor={borderColor}
               >
                 <Text
                   fontSize='sm'
@@ -212,7 +208,7 @@ const DetailProduct: React.FC = () => {
                 mt='20px'
                 pb='20px'
                 borderBottom='1px'
-                borderColor={colorThree}
+                borderColor={borderColor}
               >
                 <Text
                   fontSize='sm'
@@ -263,7 +259,7 @@ const DetailProduct: React.FC = () => {
                 pb='20px'
                 borderBottom='1px'
                 flexDirection={{ base: 'column', md: 'row' }}
-                borderColor={colorFour}
+                borderColor={borderColor}
               >
                 <Text
                   fontSize='sm'
@@ -359,7 +355,7 @@ const DetailProduct: React.FC = () => {
         </Heading>
         <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
           {similar.map(
-            (product: InterfaceProduct, i: number) =>
+            (product: IProduct, i: number) =>
               slug !== product.slug && <ProductItem {...product} key={i} />,
           )}
         </Grid>

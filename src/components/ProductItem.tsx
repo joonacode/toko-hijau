@@ -10,11 +10,11 @@ import {
 } from '@chakra-ui/react'
 import { FaHeart } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { InterfaceProduct } from '../Interface'
+import { IProduct } from '../Interface'
 import { GIFLoading } from '../assets'
 import { FormatCurrency } from '.'
 
-const ProductItem: React.FC<InterfaceProduct> = ({
+const ProductItem: React.FC<IProduct> = ({
   name,
   price,
   slug,
