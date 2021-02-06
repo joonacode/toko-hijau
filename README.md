@@ -1,6 +1,6 @@
 ## About The Project
 
-Toko Hijau is a website where you can buy and sell anything online <a href="http://tokohijau.netlify.app/">View Demo</a>
+Toko Hijau is a website where you can buy and sell anything online <a href="http://tokohijau.netlify.app/" target="_blank">View Demo</a>
 
 ## Built With
 
