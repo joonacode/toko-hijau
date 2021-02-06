@@ -17,6 +17,7 @@ import React, { useState } from 'react'
 import { FaEnvelope, FaSearch, FaBell, FaShoppingCart } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { IconNavbar, ModalSearch } from '.'
+import { IMGAvatar, IMGShop } from '../assets'
 import useCart from '../hooks/useCart'
 import ColorModeSwitcher from './ColorModeSwitcher'
 import Logo from './Logo'
@@ -93,8 +94,8 @@ const Navbar: React.FC = () => {
                 total={useCart().carts.totalItem}
               />
             </Link>
-            <IconNavbar Icon={FaBell} total={5} />
-            <IconNavbar Icon={FaEnvelope} total={0} />
+            <IconNavbar Icon={FaBell} total={2} />
+            <IconNavbar Icon={FaEnvelope} total={4} />
           </HStack>
           <Flex
             ml='20px'
@@ -106,11 +107,7 @@ const Navbar: React.FC = () => {
             <Menu isLazy>
               <MenuButton fontSize='sm' color='gray.500' size='sm'>
                 <HStack>
-                  <Avatar
-                    size='xs'
-                    name='Dan Abrahmov'
-                    src='https://bit.ly/dan-abramov'
-                  />
+                  <Avatar size='xs' name='Dan Abrahmov' src={IMGShop} />
 
                   <Text
                     fontSize='sm'
@@ -132,11 +129,7 @@ const Navbar: React.FC = () => {
             <Menu isLazy>
               <MenuButton fontSize='sm' color='gray.500' size='sm'>
                 <HStack>
-                  <Avatar
-                    size='xs'
-                    name='Dan Abrahmov'
-                    src='https://bit.ly/dan-abramov'
-                  />
+                  <Avatar size='xs' name='Dan Abrahmov' src={IMGAvatar} />
                   <Text
                     fontSize='sm'
                     color='gray.500'

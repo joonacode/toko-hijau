@@ -3,6 +3,9 @@ import {
   UPDATE_QTY,
   DELETE_CART,
   ADD_ITEM_TO_TOKO,
+  CHECK_ALL_CART,
+  UPDATE_ALL_CHECK,
+  CLEAR_CART,
 } from './../actionTypes'
 import { ADD_ITEM_TO_CART } from '../actionTypes'
 
@@ -25,11 +28,18 @@ export const updatePriceAndTotal = () => {
         return item.itemsByToko.length
       })
       .reduce((prev: any, next: any) => prev + next)
+    const selectedItem = getTotalPrice
+      .map((item: any) => {
+        return item.filter((price: any) => price !== false)
+      })
+      .map((res: any) => res.length)
+      .reduce((prev: any, next: any) => prev + next)
     dispatch({
       type: UPDATE_TOTAL_CART,
       payload: {
         totalItem: totalItem,
         totalPrice: reducePrice,
+        selectedItem: selectedItem,
       },
     })
   }
@@ -175,6 +185,19 @@ export const checkStatus = (tokoId: number) => {
   }
 }
 
+export const checkAllStatusCart = () => {
+  return function (dispatch: any, getState: any) {
+    const carts = getState().cart.carts.items
+
+    const status = carts.every((item: any) => item.allChecked === true)
+    if (status) {
+      dispatch({ type: UPDATE_ALL_CHECK, payload: true })
+    } else {
+      dispatch({ type: UPDATE_ALL_CHECK, payload: false })
+    }
+  }
+}
+
 export const changeCheckCart = (payload: TChangeCheckCart) => {
   return function (dispatch: any, getState: any) {
     const carts = getState().cart.carts.items
@@ -201,6 +224,7 @@ export const changeCheckCart = (payload: TChangeCheckCart) => {
     )
     dispatch({ type: ADD_ITEM_TO_TOKO, payload: carts })
     dispatch(checkStatus(payload.tokoId))
+    dispatch(checkAllStatusCart())
     dispatch(updatePriceAndTotal())
   }
 }
@@ -233,6 +257,54 @@ export const changeCheckToko = (payload: any) => {
     carts.splice(getIndexToko, 1, result)
 
     dispatch({ type: ADD_ITEM_TO_TOKO, payload: carts })
+    dispatch(checkAllStatusCart())
     dispatch(updatePriceAndTotal())
+  }
+}
+
+export const checkAllCart = (payload: boolean) => {
+  return function (dispatch: any, getState: any) {
+    const carts = getState().cart.carts.items
+
+    const items = carts.map((item: any) => {
+      return {
+        ...item,
+        itemsByToko: item.itemsByToko.map((item: any) => {
+          return {
+            ...item,
+            isChecked: payload,
+          }
+        }),
+        allChecked: payload,
+      }
+    })
+    const data = {
+      items: items,
+      allChecked: payload,
+    }
+    dispatch({ type: CHECK_ALL_CART, payload: data })
+    dispatch(updatePriceAndTotal())
+  }
+}
+
+export const paymentAction = (payload: boolean) => {
+  return function (dispatch: any, getState: any) {
+    if (payload) {
+      dispatch({ type: CLEAR_CART })
+    } else {
+      const carts = getState().cart.carts.items
+      const result = carts
+        .map((item: any) => {
+          return {
+            ...item,
+            itemsByToko: item.itemsByToko.filter(
+              (cart: any) => cart.isChecked === false,
+            ),
+          }
+        })
+        .filter((item: any) => item.itemsByToko.length > 0)
+      dispatch({ type: ADD_ITEM_TO_TOKO, payload: result })
+      dispatch(updatePriceAndTotal())
+    }
   }
 }

@@ -14,8 +14,8 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { GIFLoading } from '../assets'
+import { Link, useParams } from 'react-router-dom'
+import { GIFLoading, IMGProductNotFound } from '../assets'
 import {
   ModalCart,
   Breadcrumb,
@@ -29,6 +29,7 @@ import useProduct from '../hooks/useProduct'
 import { addToCart } from '../state/cart/cartActions'
 import { InterfaceCartItem, InterfaceProduct } from '../Interface'
 import { getProductBySlug } from '../state/product/productAction'
+import { FaHeart } from 'react-icons/fa'
 
 const DetailProduct: React.FC = () => {
   const dispatch = useDispatch()
@@ -115,165 +116,238 @@ const DetailProduct: React.FC = () => {
     setPreviewImage(image)
   }
 
+  const [isLike, setIsLike] = useState(false)
+
+  const toggleIsLike = () => {
+    setIsLike(!isLike)
+    toast({
+      position: 'bottom-left',
+      title: isLike
+        ? 'Dihapus dari produk yang disukai.'
+        : 'Ditambahkan ke produk yang disukai.',
+      status: isLike ? 'error' : 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+  }
+
   useEffect(() => {
+    setIsLike(false)
     setPreviewImage('')
     setColor('')
     setSize('')
   }, [slug])
 
+  const colorOne = useColorModeValue('gray.200', 'gray.700')
+  const colorTwo = useColorModeValue('orange.600', 'orange.400')
+  const colorThree = useColorModeValue('gray.200', 'gray.700')
+  const colorFour = useColorModeValue('gray.200', 'gray.700')
+
   return (
     <>
-      <Breadcrumb dataBreadcrumb={dataBreadcrumb} />
-      <Grid templateColumns='repeat(12, 1fr)' gap={{ base: '0', md: '50px' }}>
-        <GridItem colSpan={{ base: 12, md: 5 }}>
-          <Box rounded='lg' overflow='hidden'>
-            <Image
-              fallbackSrc={GIFLoading}
-              src={previewImage || detailProduct.image}
-              alt='baju'
-              boxSize='100%'
-              objectFit='cover'
-            />
-          </Box>
-          <Box mt='10px'>
-            <ListImageProduct
-              previewImage={previewImage}
-              handleClickImage={handleClickImage}
-            />
-          </Box>
-        </GridItem>
-        <GridItem mt={{ base: '40px', md: '0' }} colSpan={{ base: 12, md: 7 }}>
-          <Heading as='h2' size='md' textTransform='uppercase'>
-            {detailProduct.name}
-          </Heading>
-          <HStack mt='10px' spacing='12px'>
-            <Text fontSize='sm' color='gray.500'>
-              Terjual 2.228
-            </Text>
-            <Text fontSize='sm' color='gray.500'>
-              (800 ulasan)
-            </Text>
-            <Text fontSize='sm' color='gray.500'>
-              Diskusi (120)
-            </Text>
-          </HStack>
-          <Stack
-            direction={{ base: 'column', md: 'row' }}
-            spacing={{ base: '10px', md: '30px' }}
-            mt='40px'
-            pb='20px'
-            borderBottom='1px'
-            borderColor={useColorModeValue('gray.200', 'gray.700')}
+      {detailProduct.image ? (
+        <>
+          <Breadcrumb dataBreadcrumb={dataBreadcrumb} />
+          <Grid
+            templateColumns='repeat(12, 1fr)'
+            gap={{ base: '0', md: '50px' }}
           >
-            <Text
-              fontSize='sm'
-              color='gray.500'
-              textTransform='uppercase'
-              fontWeight='500'
+            <GridItem colSpan={{ base: 12, md: 5 }}>
+              <Box rounded='lg' overflow='hidden'>
+                <Image
+                  fallbackSrc={GIFLoading}
+                  src={previewImage || detailProduct.image}
+                  alt='baju'
+                  boxSize='100%'
+                  objectFit='cover'
+                />
+              </Box>
+              <Box mt='10px'>
+                <ListImageProduct
+                  previewImage={previewImage}
+                  handleClickImage={handleClickImage}
+                />
+              </Box>
+            </GridItem>
+            <GridItem
+              mt={{ base: '40px', md: '0' }}
+              colSpan={{ base: 12, md: 7 }}
             >
-              Harga
-            </Text>
-            <Text
-              fontSize='xl'
-              color={useColorModeValue('orange.600', 'orange.400')}
-              fontWeight='bold'
-            >
-              <FormatCurrency value={detailProduct.price} />
-            </Text>
-          </Stack>
-          <Flex
-            flexDirection={{ base: 'column', md: 'row' }}
-            mt='20px'
-            pb='20px'
-            borderBottom='1px'
-            borderColor={useColorModeValue('gray.200', 'gray.700')}
-          >
-            <Text
-              fontSize='sm'
-              mr='30px'
-              color='gray.500'
-              textTransform='uppercase'
-              fontWeight='500'
-            >
-              Warna
-            </Text>
-            <Box mt={{ base: '10px', md: '0' }}>
-              <Text fontSize='sm' mb='10px' color='gray.600' fontWeight='bold'>
-                Variant
-              </Text>
-              <Flex alignItems='center' wrap='wrap'>
-                {colorOptions.map((v: string) => (
-                  <RadioCheck
-                    name='color'
-                    value={v}
-                    valueUser={color}
-                    key={v}
-                    pr='10px'
-                    onChange={() => setColor(v)}
-                  >
-                    <HStack spacing='10px'>
-                      <Image
-                        fallbackSrc={GIFLoading}
-                        boxSize='35px'
-                        rounded='lg'
-                        objectFit='cover'
-                        src='https://htmlcolorcodes.com/assets/images/html-color-codes-color-palette-generators.jpg'
-                        alt='Segun Adebayo'
-                      />
-                      <Text fontSize='sm'>{v}</Text>
-                    </HStack>
-                  </RadioCheck>
-                ))}
-              </Flex>
-            </Box>
-          </Flex>
-          <Flex
-            mt='20px'
-            pb='20px'
-            borderBottom='1px'
-            flexDirection={{ base: 'column', md: 'row' }}
-            borderColor={useColorModeValue('gray.200', 'gray.700')}
-          >
-            <Text
-              fontSize='sm'
-              mr='30px'
-              color='gray.500'
-              textTransform='uppercase'
-              fontWeight='500'
-            >
-              Ukuran
-            </Text>
-            <Box mt={{ base: '10px', md: '0' }}>
-              <Text fontSize='sm' mb='10px' color='gray.600' fontWeight='bold'>
-                Pilih variant
-              </Text>
-              <HStack>
-                {sizeOptions.map((v: string) => (
-                  <RadioCheck
-                    name='size'
-                    value={v}
-                    valueUser={size}
-                    key={v}
-                    rounded='lg'
-                    pr='10px'
-                    pl='10px'
-                    onChange={() => setSize(v)}
-                  >
-                    <Text fontSize='sm' textTransform='uppercase'>
-                      {v}
-                    </Text>
-                  </RadioCheck>
-                ))}
+              <Heading as='h2' size='md' textTransform='uppercase'>
+                {detailProduct.name}
+              </Heading>
+              <HStack mt='10px' spacing='12px'>
+                <Text fontSize='sm' color='gray.500'>
+                  Terjual 2.228
+                </Text>
+                <Text fontSize='sm' color='gray.500'>
+                  (800 ulasan)
+                </Text>
+                <Text fontSize='sm' color='gray.500'>
+                  Diskusi (120)
+                </Text>
               </HStack>
-            </Box>
-          </Flex>
-          <HStack mt='20px'>
-            <Button colorScheme='green' onClick={showModal} borderRadius='md'>
-              Tambah Ke Keranjang
+              <Stack
+                direction={{ base: 'column', md: 'row' }}
+                spacing={{ base: '10px', md: '30px' }}
+                mt='40px'
+                pb='20px'
+                borderBottom='1px'
+                borderColor={colorOne}
+              >
+                <Text
+                  fontSize='sm'
+                  color='gray.500'
+                  textTransform='uppercase'
+                  fontWeight='500'
+                >
+                  Harga
+                </Text>
+                <Text fontSize='xl' color={colorTwo} fontWeight='bold'>
+                  <FormatCurrency value={detailProduct.price} />
+                </Text>
+              </Stack>
+              <Flex
+                flexDirection={{ base: 'column', md: 'row' }}
+                mt='20px'
+                pb='20px'
+                borderBottom='1px'
+                borderColor={colorThree}
+              >
+                <Text
+                  fontSize='sm'
+                  mr='30px'
+                  color='gray.500'
+                  textTransform='uppercase'
+                  fontWeight='500'
+                >
+                  Warna
+                </Text>
+                <Box mt={{ base: '10px', md: '0' }}>
+                  <Text
+                    fontSize='sm'
+                    mb='10px'
+                    color='gray.600'
+                    fontWeight='bold'
+                  >
+                    Variant
+                  </Text>
+                  <Flex alignItems='center' wrap='wrap'>
+                    {colorOptions.map((v: string) => (
+                      <RadioCheck
+                        name='color'
+                        value={v}
+                        valueUser={color}
+                        key={v}
+                        pr='10px'
+                        onChange={() => setColor(v)}
+                      >
+                        <HStack spacing='10px'>
+                          <Image
+                            fallbackSrc={GIFLoading}
+                            boxSize='35px'
+                            rounded='lg'
+                            objectFit='cover'
+                            src='https://htmlcolorcodes.com/assets/images/html-color-codes-color-palette-generators.jpg'
+                            alt='Segun Adebayo'
+                          />
+                          <Text fontSize='sm'>{v}</Text>
+                        </HStack>
+                      </RadioCheck>
+                    ))}
+                  </Flex>
+                </Box>
+              </Flex>
+              <Flex
+                mt='20px'
+                pb='20px'
+                borderBottom='1px'
+                flexDirection={{ base: 'column', md: 'row' }}
+                borderColor={colorFour}
+              >
+                <Text
+                  fontSize='sm'
+                  mr='30px'
+                  color='gray.500'
+                  textTransform='uppercase'
+                  fontWeight='500'
+                >
+                  Ukuran
+                </Text>
+                <Box mt={{ base: '10px', md: '0' }}>
+                  <Text
+                    fontSize='sm'
+                    mb='10px'
+                    color='gray.600'
+                    fontWeight='bold'
+                  >
+                    Pilih variant
+                  </Text>
+                  <HStack>
+                    {sizeOptions.map((v: string) => (
+                      <RadioCheck
+                        name='size'
+                        value={v}
+                        valueUser={size}
+                        key={v}
+                        rounded='lg'
+                        pr='10px'
+                        pl='10px'
+                        onChange={() => setSize(v)}
+                      >
+                        <Text fontSize='sm' textTransform='uppercase'>
+                          {v}
+                        </Text>
+                      </RadioCheck>
+                    ))}
+                  </HStack>
+                </Box>
+              </Flex>
+              <HStack mt='20px'>
+                <Button
+                  colorScheme='green'
+                  onClick={showModal}
+                  borderRadius='md'
+                >
+                  Tambah Ke Keranjang
+                </Button>
+                <Button
+                  bgColor={isLike ? 'gray.100' : 'gray.500'}
+                  color={isLike ? 'red.500' : 'white'}
+                  borderRadius='md'
+                  onClick={toggleIsLike}
+                >
+                  <FaHeart />
+                </Button>
+              </HStack>
+            </GridItem>
+          </Grid>
+        </>
+      ) : (
+        <Flex
+          flexDir='column'
+          justifyContent='center'
+          alignItems='center'
+          w='100%'
+          my='50px'
+        >
+          <Image
+            src={IMGProductNotFound}
+            fallbackSrc={GIFLoading}
+            alt='empty'
+            width='400px'
+          />
+          <Heading as='h2' mt='20px' fontSize='xl'>
+            Produk Tidak Ditemukan
+          </Heading>
+          <Link to='/'>
+            <Button mt='18px' colorScheme='green'>
+              Kembali
             </Button>
-          </HStack>
-        </GridItem>
-      </Grid>
+          </Link>
+        </Flex>
+      )}
+
       <Box
         mt='40px'
         borderTop='1px'
@@ -281,7 +355,7 @@ const DetailProduct: React.FC = () => {
         pt='40px'
       >
         <Heading as='h5' size='md' mb='30px'>
-          Produk Serupa
+          {detailProduct.image ? 'Produk Serupa' : 'Jelajahi Produk'}
         </Heading>
         <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
           {similar.map(

@@ -8,10 +8,17 @@ export const getProductBySlug = (payload: string) => {
     const response = products.filter(
       (product: InterfaceProduct) => product.slug === payload,
     )
-    dispatch({
-      type: GET_PRODUCT_BY_SLUG,
-      payload: response[0],
-    })
+    if (response.length > 0) {
+      dispatch({
+        type: GET_PRODUCT_BY_SLUG,
+        payload: response[0],
+      })
+    } else {
+      dispatch({
+        type: GET_PRODUCT_BY_SLUG,
+        payload: { image: '' },
+      })
+    }
   }
 }
 

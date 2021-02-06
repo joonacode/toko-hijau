@@ -20,18 +20,21 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Checkbox,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { GIFLoading, IMGEmpty } from '../assets'
 import { CartItem, FormatCurrency } from '../components'
 import { CLEAR_CART } from '../state/actionTypes'
+import { checkAllCart, paymentAction } from '../state/cart/cartActions'
 
 const Cart: React.FC = () => {
-  const { items, totalItem, totalPrice } = useSelector(
+  const { items, totalPrice, allChecked, selectedItem } = useSelector(
     (state: RootStateOrAny) => state.cart.carts,
   )
+  const history = useHistory()
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const onOpen = () => {
@@ -51,6 +54,15 @@ const Cart: React.FC = () => {
     onClose()
   }
 
+  const handleCheckAll = (isChecked: boolean) => {
+    dispatch(checkAllCart(!isChecked))
+  }
+
+  const handleBuy = (allChecked: boolean) => {
+    history.push('/payment/success')
+    dispatch(paymentAction(allChecked))
+  }
+
   return (
     <Box minH='70vh'>
       {items.length === 0 ? (
@@ -67,7 +79,7 @@ const Cart: React.FC = () => {
             alt='empty'
             width='400px'
           />
-          <Heading as='h2' fontSize='3xl'>
+          <Heading as='h2' mt='20px' fontSize='xl'>
             Keranjang Kosong
           </Heading>
           <Link to='/'>
@@ -82,13 +94,25 @@ const Cart: React.FC = () => {
             <GridItem colSpan={{ base: 12, md: 7, lg: 8 }}>
               <Box borderBottom='4px' borderColor={borderColor} pb='10px'>
                 <Flex alignItems='center'>
+                  <Checkbox
+                    isChecked={allChecked}
+                    onChange={() => handleCheckAll(allChecked)}
+                    colorScheme='green'
+                    // mr='15px'
+                  ></Checkbox>
                   <Text ml='15px' fontSize='sm'>
-                    List Barang
+                    Pilih Semua Produk
                   </Text>
                   <Spacer />
-                  <Button size='sm' onClick={onOpen}>
-                    Hapus Keranjang
-                  </Button>
+                  {allChecked ? (
+                    <Button variant='ghost' size='sm' onClick={onOpen}>
+                      Hapus
+                    </Button>
+                  ) : (
+                    <Button variant='ghost' size='sm'>
+                      Hapus
+                    </Button>
+                  )}
                 </Flex>
               </Box>
               {items.map((cart: any, i: number) => (
@@ -134,15 +158,29 @@ const Cart: React.FC = () => {
                           <FormatCurrency value={totalPrice} />
                         </Text>
                       </Flex>
-                      <Button
-                        mt='20px'
-                        colorScheme='green'
-                        fontSize='sm'
-                        size='sm'
-                        w='100%'
-                      >
-                        Beli ({totalItem})
-                      </Button>
+                      {selectedItem > 0 ? (
+                        <Button
+                          mt='20px'
+                          colorScheme='green'
+                          fontSize='sm'
+                          size='sm'
+                          w='100%'
+                          onClick={() => handleBuy(allChecked)}
+                        >
+                          Beli ({selectedItem})
+                        </Button>
+                      ) : (
+                        <Button
+                          mt='20px'
+                          colorScheme='teal'
+                          fontSize='sm'
+                          size='sm'
+                          isDisabled={true}
+                          w='100%'
+                        >
+                          Beli ({selectedItem})
+                        </Button>
+                      )}
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>

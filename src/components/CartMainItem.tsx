@@ -124,6 +124,21 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
     dispatch(changeCheckCart({ ...data }))
   }
 
+  const [isLike, setIsLike] = useState(false)
+
+  const toggleIsLike = () => {
+    setIsLike(!isLike)
+    toast({
+      position: 'bottom-left',
+      title: isLike
+        ? 'Dihapus dari produk yang disukai.'
+        : 'Ditambahkan ke produk yang disukai.',
+      status: isLike ? 'error' : 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+  }
+
   return (
     <Box mb='30px'>
       <Flex alignItems='center'>
@@ -192,7 +207,12 @@ const CartMainItem: React.FC<InterfaceCartItem> = ({
         </Button>
         <Spacer />
         <HStack>
-          <Button size='sm' variant='ghost' color='gray.400'>
+          <Button
+            size='sm'
+            variant='ghost'
+            onClick={toggleIsLike}
+            color={isLike ? 'red.500' : 'gray.400'}
+          >
             <FaHeart />
           </Button>
           <Button

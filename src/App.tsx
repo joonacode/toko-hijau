@@ -11,6 +11,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Home, DetailProduct, Cart } from './pages'
 import theme from './theme'
 import './assets/styles/global.css'
+import PageNotFound from './pages/PageNotFound'
+import Payment from './pages/Payment'
 
 export const App: React.FC = () => {
   return (
@@ -31,7 +33,9 @@ export const App: React.FC = () => {
           <Switch>
             <Route exact={true} path='/' component={Home} />
             <Route path='/detail/:slug' component={DetailProduct} />
+            <Route path='/payment/:status' component={Payment} />
             <Route path='/cart' component={Cart} />
+            <Route path='*' component={PageNotFound} />
           </Switch>
         </Container>
         <Footer />
