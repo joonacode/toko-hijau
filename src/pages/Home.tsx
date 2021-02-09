@@ -76,7 +76,12 @@ const Home: React.FC = () => {
 
         <TabPanels minH='80vh'>
           <TabPanel>
-            <Flex mt='10px' mb='20px' align='center'>
+            <Flex
+              mt='10px'
+              mb='20px'
+              align='center'
+              flexDirection={{ base: 'column', sm: 'row' }}
+            >
               <Text fontSize='lg' fontWeight='bold'>
                 Produk Kami
               </Text>
@@ -109,14 +114,20 @@ const Home: React.FC = () => {
               </Flex>
             </Flex>
             {currentPage === 1 && (
-              <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
+              <Grid
+                templateColumns='repeat(20, 1fr)'
+                gap={{ base: '5px', sm: '15px' }}
+              >
                 {pageOne.map((product: IProduct, i: number) => (
                   <ProductItem {...product} key={i} />
                 ))}
               </Grid>
             )}
             {currentPage === 2 && (
-              <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
+              <Grid
+                templateColumns='repeat(20, 1fr)'
+                gap={{ base: '0', sm: '15px' }}
+              >
                 {pageTwo.map((product: IProduct, i: number) => (
                   <ProductItem {...product} key={i} />
                 ))}

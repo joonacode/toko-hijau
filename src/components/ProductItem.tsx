@@ -52,13 +52,15 @@ const ProductItem: React.FC<IProduct> = ({
             src={image}
             alt={name}
             minHeight={{
-              base: '200px',
+              base: '100%',
+              sm: '200px',
               md: '170px',
               lg: '150px',
               xl: '200px',
             }}
             maxHeight={{
-              base: '200px',
+              base: '100%',
+              sm: '200px',
               md: '170px',
               lg: '150px',
               xl: '200px',

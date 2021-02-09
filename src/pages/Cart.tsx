@@ -88,7 +88,10 @@ const Cart: React.FC = () => {
         </Flex>
       ) : (
         <>
-          <Grid templateColumns='repeat(12, 1fr)' gap='30px'>
+          <Grid
+            templateColumns='repeat(12, 1fr)'
+            gap={{ base: '5px', sm: '30px' }}
+          >
             <GridItem colSpan={{ base: 12, md: 7, lg: 8 }}>
               <Box borderBottom='4px' borderColor={borderColor} pb='10px'>
                 <Flex alignItems='center'>

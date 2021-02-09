@@ -353,7 +353,10 @@ const DetailProduct: React.FC = () => {
         <Heading as='h5' size='md' mb='30px'>
           {detailProduct.image ? 'Produk Serupa' : 'Jelajahi Produk'}
         </Heading>
-        <Grid templateColumns='repeat(20, 1fr)' gap='15px'>
+        <Grid
+          templateColumns='repeat(20, 1fr)'
+          gap={{ base: '5px', sm: '15px' }}
+        >
           {similar.map(
             (product: IProduct, i: number) =>
               slug !== product.slug && <ProductItem {...product} key={i} />,
