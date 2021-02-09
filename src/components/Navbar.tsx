@@ -136,7 +136,7 @@ const Navbar: React.FC = () => {
                     color={useSecondaryColor()}
                     display={{ base: 'none', lg: 'block' }}
                   >
-                    Muhammad
+                    Juna
                   </Text>
                 </HStack>
               </MenuButton>
